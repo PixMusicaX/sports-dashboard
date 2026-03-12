@@ -21,14 +21,13 @@ matchRouter.get('/', async (req, res) => {
     try {
         const data = await db.select()
             .from(matches)
-            // FIX: Removed the extra outer parentheses
             .orderBy(desc(matches.createdAt))
             .limit(limit);
 
         res.json({ data });
     }
     catch(err) {
-        res.status(500).send({ error: 'Failed to create matches' });
+        res.status(500).send({ error: 'Failed to fetch matches' });
     }
 });
 
