@@ -13,7 +13,7 @@ matchRouter.get('/', async (req, res) => {
     const parsed = listMatchesQuerySchema.safeParse(req.query);
 
     if(!parsed.success) {
-        return res.status(400).send({ error: 'invalid query', details: JSON.stringify(parsed.error) });
+        return res.status(400).send({ error: 'invalid query', details: parsed.error.issues });
     }
 
     const limit = Math.min(parsed.data.limit ?? 50, MAX_LIMIT);
@@ -38,11 +38,10 @@ matchRouter.post('/', async (req, res) => {
     if (!parsed.success) {
         return res.status(400).json({
             message: 'Invalid Payload',
-            details: JSON.stringify(parsed.error)
+            details: parsed.error.issues
         });
     }
 
-    // FIX: Added the destructuring back in so the variables exist for the try block!
     const { startTime, endTime, homeScore, awayScore } = parsed.data;
 
     try {
